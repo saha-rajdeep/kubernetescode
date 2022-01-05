@@ -26,7 +26,14 @@ node {
     //        app.push("${env.BUILD_NUMBER}")
     //    }
     //}
-    
+    stage('Trigger ManifestUpdate') {
+        {
+            steps {
+                echo "triggering changemanifestjob"
+                build job: 'changemanifest', parameters: [string(name: 'DOCKERTAG', value: ${env.BUILD_NUMBER})]
+            }
+        }
+    }
     //stage('Update GIT') {
           //  script {
            //     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
