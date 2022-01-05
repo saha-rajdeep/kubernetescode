@@ -39,7 +39,7 @@ node {
                         //sh "git config user.name RajSaha"
                         sh "git clone https://github.com/saha-rajdeep/kubernetesmanifest.git"
                         sh "ls -r"
-                        sh "cd kubernetesmanifest" 
+                        sh "cd ./kubernetesmanifest" 
                         sh "pwd"
                         sh "ls -al"
                         //sh "git switch master"
