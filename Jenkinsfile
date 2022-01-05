@@ -29,7 +29,7 @@ node {
     
     stage('Trigger ManifestUpdate') {
                 echo "triggering changemanifestjob"
-                build job: 'changemanifest', parameters: [string(name: 'DOCKERTAG', value: ${env.BUILD_NUMBER})]
+                build job: 'changemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
         }
     
     //stage('Update GIT') {
