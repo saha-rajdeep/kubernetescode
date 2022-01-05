@@ -35,8 +35,8 @@ node {
                         sh "ls"
                         deleteDir()
                         sh "ls"
-                        sh "git config user.email raj@cloudwithraj.com"
-                        sh "git config user.name RajSaha"
+                        //sh "git config user.email raj@cloudwithraj.com"
+                        //sh "git config user.name RajSaha"
                         sh "git clone https://github.com/saha-rajdeep/kubernetesmanifest.git"
                         sh "cd kubernetesmanifest" 
                         //sh "git switch master"
