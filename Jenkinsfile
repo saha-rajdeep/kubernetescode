@@ -15,7 +15,7 @@ pipeline {
         stage("Test") {
             steps {
                 sh('chmod 777 run_all_tests.sh ')
-                sh('./run_all_tests.sht')
+                sh('./run_all_tests.sh')
 	    }
         }
         stage("Deploy to Staging") {
