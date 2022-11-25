@@ -28,5 +28,15 @@ pipeline {
                 sh('./build_and_publish.sh')
 	    }
         }
+        stage("Deploy to Production") {
+    when {
+        buildingTag()
+        environment name: 'ENVIRONMENT', value: 'production'
+    }
+    steps {
+        sh('chmod 777 Deploytoprod.sh')
+        sh('./Deploytoprod.sh')
+    }
+}
     }
 }
