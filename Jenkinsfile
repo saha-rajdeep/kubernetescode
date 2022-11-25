@@ -1,30 +1,15 @@
-pipeline {
-    agent { label 'myLabel' }
-    parameters {
-        choice(choices: 'staging\nproduction', description: 'Which environment?', name: 'ENVIRONMENT')
+node {
+    stage ("checkout") {
+        checkout scm
     }
-    environment {
-        GIT_TAG = sh(returnStdout: true, script: 'git describe --always').trim()
+    stage("test") {
+        sh('run_all_tests.sh')
     }
-    stages {
-        stage("Checkout") {
-            steps {
-                checkout scm
-	    }
-        }
-        stage("Test") {
-            steps {
-                sh('make test')
-	    }
-        }
-        stage("Deploy to Staging") {
-            when {
-                buildingTag()
-                environment name: 'ENVIRONMENT', value: 'staging'
-            }
-            steps {
-                sh('make deploy')
-	    }
+    def tag = sh(returnStdout: true, script: "git tag --contains | head -1").trim()
+    if (tag) {
+        stage("deploy") {
+            sh('build_and_publish.sh')
         }
     }
 }
+
