@@ -1,5 +1,5 @@
 pipeline {
-    agent { any }
+    agent any 
     parameters {
         choice(choices: 'staging\nproduction', description: 'Which environment?', name: 'ENVIRONMENT')
     }
