@@ -1,34 +1,30 @@
-node {
-    def app
-
-    stage('Clone repository') {
-      
-
-        checkout scm
+pipeline {
+    agent { label 'myLabel' }
+    parameters {
+        choice(choices: 'staging\nproduction', description: 'Which environment?', name: 'ENVIRONMENT')
     }
-
-    stage('Build image') {
-  
-       app = docker.build("nikita1239/pro11")
+    environment {
+        GIT_TAG = sh(returnStdout: true, script: 'git describe --always').trim()
     }
-
-    stage('Test image') {
-  
-
-        app.inside {
-            sh 'echo "Tests passed"'
+    stages {
+        stage("Checkout") {
+            steps {
+                checkout scm
+	    }
+        }
+        stage("Test") {
+            steps {
+                sh('make test')
+	    }
+        }
+        stage("Deploy to Staging") {
+            when {
+                buildingTag()
+                environment name: 'ENVIRONMENT', value: 'staging'
+            }
+            steps {
+                sh('make deploy')
+	    }
         }
     }
-
-    stage('Push image') {
-        
-        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-            app.push("${env.BUILD_NUMBER}")
-        }
-    }
-    
-    stage('Trigger ManifestUpdate') {
-                echo "triggering updatemanifestjob"
-                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
-        }
 }
